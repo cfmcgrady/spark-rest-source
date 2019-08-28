@@ -1,0 +1,30 @@
+<assembly>
+    <id>bin-${project.version}</id>
+    <formats>
+        <format>tgz</format>
+    </formats>
+    <fileSets>
+        <fileSet>
+            <directory>${project.basedir}/conf</directory>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>.</outputDirectory>
+            <includes>
+                <include>bootstrap.sh</include>
+                <include>INFO</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/libs</directory>
+            <outputDirectory>libs</outputDirectory>
+            <includes>
+                <include>**/*</include>
+            </includes>
+        </fileSet>
+    </fileSets>
+</assembly>
