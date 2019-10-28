@@ -1,6 +1,5 @@
 package org.apache.spark.sql.fontainebleau
 
-import okhttp3.{MediaType, OkHttpClient, Request}
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan
 import org.apache.spark.sql.execution.LogicalRDD
@@ -18,7 +17,7 @@ class RestApiSource(url: String) extends Source {
 
   override def schema: StructType = {
     _schema.getOrElse {
-      val json = RestApiSource.getJson(url)
+      val json = HttpClient.get(url)
       val df = sparkSession.read.json(Seq(json).toDS)
       _schema = Option(df.schema)
       df.schema
@@ -37,7 +36,7 @@ class RestApiSource(url: String) extends Source {
 
   private def getRequest(): DataFrame = {
 
-    val json = RestApiSource.getJson(url)
+    val json = HttpClient.get(url)
     val plan = sparkSession.read
       .json(Seq(json).toDS)
       .logicalPlan
@@ -51,28 +50,4 @@ class RestApiSource(url: String) extends Source {
     // do nothing.
   }
 
-}
-
-object RestApiSource {
-
-  val JSON = MediaType.get("application/json; charset=utf-8")
-  def getJson(url: String): String = {
-    try {
-      val client = new OkHttpClient()
-      val req = new Request.Builder()
-        .url(url)
-        .get()
-        .build()
-      val respo = client.newCall(req).execute()
-      val result = respo.body().string()
-      respo.body().close()
-      result
-    } catch {
-      case e: Exception =>
-        // scalastyle:off println
-        e.printStackTrace()
-        // scalastyle:on
-        ""
-    }
-  }
 }

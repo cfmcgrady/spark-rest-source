@@ -8,7 +8,7 @@ import org.apache.spark.sql.streaming.Trigger
  * @author fchen <cloud.chenfu@gmail.com>
  */
 object RestApiSourceExample {
-  val URL = "http://httpbin.org/get"
+  val URL = "http://httpbin.org/get?a=a&b=b"
 
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
